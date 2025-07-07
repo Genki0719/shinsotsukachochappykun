@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "html2pdf.js": "^0.10.3",
+    "express": "^4.19.2",
+    "react-router-dom": "^6.23.1",
+    "uuid": "^9.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
