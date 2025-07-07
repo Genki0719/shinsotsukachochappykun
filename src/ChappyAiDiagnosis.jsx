@@ -87,14 +87,42 @@ const ChappyAiDiagnosis = () => {
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">新卒課長チャッピーくん - AI診断</h1>
 
-      <div className="space-y-4">
-        <input className="w-full p-2 border rounded" placeholder="会社名" onChange={e => setFormData({ ...formData, companyName: e.target.value })} />
-        <input className="w-full p-2 border rounded" placeholder="現在のURL（任意）" onChange={e => setFormData({ ...formData, currentUrl: e.target.value })} />
-        <input className="w-full p-2 border rounded" placeholder="競合URL（任意）" onChange={e => setFormData({ ...formData, competitorUrl: e.target.value })} />
-        <input className="w-full p-2 border rounded" placeholder="商圏" onChange={e => setFormData({ ...formData, businessArea: e.target.value })} />
-        <textarea className="w-full p-2 border rounded" placeholder="会社説明" onChange={e => setFormData({ ...formData, companyDescription: e.target.value })} />
-        <textarea className="w-full p-2 border rounded" placeholder="現状の課題" onChange={e => setFormData({ ...formData, currentIssues: e.target.value })} />
-        <textarea className="w-full p-2 border rounded" placeholder="HPリニューアルの目的" onChange={e => setFormData({ ...formData, renewalPurpose: e.target.value })} />
+      <div className="grid grid-cols-2 gap-4">
+        <input
+          className="p-2 border rounded"
+          placeholder="会社名"
+          onChange={e => setFormData({ ...formData, companyName: e.target.value })}
+        />
+        <input
+          className="p-2 border rounded"
+          placeholder="現在のURL（任意）"
+          onChange={e => setFormData({ ...formData, currentUrl: e.target.value })}
+        />
+        <input
+          className="p-2 border rounded"
+          placeholder="競合URL（任意）"
+          onChange={e => setFormData({ ...formData, competitorUrl: e.target.value })}
+        />
+        <input
+          className="p-2 border rounded"
+          placeholder="商圏"
+          onChange={e => setFormData({ ...formData, businessArea: e.target.value })}
+        />
+        <textarea
+          className="col-span-2 p-2 border rounded"
+          placeholder="会社説明"
+          onChange={e => setFormData({ ...formData, companyDescription: e.target.value })}
+        />
+        <textarea
+          className="col-span-2 p-2 border rounded"
+          placeholder="現状の課題"
+          onChange={e => setFormData({ ...formData, currentIssues: e.target.value })}
+        />
+        <textarea
+          className="col-span-2 p-2 border rounded"
+          placeholder="HPリニューアルの目的"
+          onChange={e => setFormData({ ...formData, renewalPurpose: e.target.value })}
+        />
       </div>
 
       <button className="mt-6 bg-blue-600 text-white px-4 py-2 rounded" onClick={generateAll}>AI診断スタート</button>
