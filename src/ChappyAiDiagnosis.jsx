@@ -16,6 +16,7 @@ const ChappyAiDiagnosis = () => {
   const [sitemap, setSitemap] = useState([]);
   const [competitorAnalysis, setCompetitorAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
+  const [shareLink, setShareLink] = useState('');
 
   const callOpenAI = async (prompt) => {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -70,18 +71,58 @@ const ChappyAiDiagnosis = () => {
     html2pdf().from(element).save('chappy-diagnosis.pdf');
   };
 
+  const createShareLink = async () => {
+    const res = await fetch('/results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ improvements, sitemap, competitorAnalysis }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setShareLink(`${window.location.origin}/result/${data.id}`);
+    }
+  };
+
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">1新卒課長チャッピーくん - AI診断</h1>
+      <h1 className="text-3xl font-bold mb-4">新卒課長チャッピーくん - AI診断</h1>
 
-      <div className="space-y-4">
-        <input className="w-full p-2 border rounded" placeholder="会社名" onChange={e => setFormData({ ...formData, companyName: e.target.value })} />
-        <input className="w-full p-2 border rounded" placeholder="現在のURL（任意）" onChange={e => setFormData({ ...formData, currentUrl: e.target.value })} />
-        <input className="w-full p-2 border rounded" placeholder="競合URL（任意）" onChange={e => setFormData({ ...formData, competitorUrl: e.target.value })} />
-        <input className="w-full p-2 border rounded" placeholder="商圏" onChange={e => setFormData({ ...formData, businessArea: e.target.value })} />
-        <textarea className="w-full p-2 border rounded" placeholder="会社説明" onChange={e => setFormData({ ...formData, companyDescription: e.target.value })} />
-        <textarea className="w-full p-2 border rounded" placeholder="現状の課題" onChange={e => setFormData({ ...formData, currentIssues: e.target.value })} />
-        <textarea className="w-full p-2 border rounded" placeholder="HPリニューアルの目的" onChange={e => setFormData({ ...formData, renewalPurpose: e.target.value })} />
+      <div className="grid grid-cols-2 gap-4">
+        <input
+          className="p-2 border rounded"
+          placeholder="会社名"
+          onChange={e => setFormData({ ...formData, companyName: e.target.value })}
+        />
+        <input
+          className="p-2 border rounded"
+          placeholder="現在のURL（任意）"
+          onChange={e => setFormData({ ...formData, currentUrl: e.target.value })}
+        />
+        <input
+          className="p-2 border rounded"
+          placeholder="競合URL（任意）"
+          onChange={e => setFormData({ ...formData, competitorUrl: e.target.value })}
+        />
+        <input
+          className="p-2 border rounded"
+          placeholder="商圏"
+          onChange={e => setFormData({ ...formData, businessArea: e.target.value })}
+        />
+        <textarea
+          className="col-span-2 p-2 border rounded"
+          placeholder="会社説明"
+          onChange={e => setFormData({ ...formData, companyDescription: e.target.value })}
+        />
+        <textarea
+          className="col-span-2 p-2 border rounded"
+          placeholder="現状の課題"
+          onChange={e => setFormData({ ...formData, currentIssues: e.target.value })}
+        />
+        <textarea
+          className="col-span-2 p-2 border rounded"
+          placeholder="HPリニューアルの目的"
+          onChange={e => setFormData({ ...formData, renewalPurpose: e.target.value })}
+        />
       </div>
 
       <button className="mt-6 bg-blue-600 text-white px-4 py-2 rounded" onClick={generateAll}>AI診断スタート</button>
@@ -120,10 +161,21 @@ const ChappyAiDiagnosis = () => {
         )}
       </div>
 
-      {(improvements.length > 0 || sitemap.length > 0) && (
-        <button className="mt-6 bg-green-600 text-white px-4 py-2 rounded" onClick={exportPdf}>
-          PDFで保存する
-        </button>
+      {(improvements.length > 0 || sitemap.length > 0 || competitorAnalysis) && (
+        <div className="mt-6 flex flex-wrap gap-4">
+          {!shareLink && (
+            <button className="bg-purple-600 text-white px-4 py-2 rounded" onClick={createShareLink}>
+              共有リンクを作成
+            </button>
+          )}
+          <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={exportPdf}>
+            PDFで保存する
+          </button>
+        </div>
+      )}
+
+      {shareLink && (
+        <p className="mt-4">共有リンク: <a className="text-blue-600 break-all" href={shareLink}>{shareLink}</a></p>
       )}
     </div>
   );
